@@ -1,0 +1,159 @@
+<!doctype html>
+<!--
+@license
+Copyright 2016 The Advanced REST client authors <arc@mulesoft.com>
+Licensed under the Apache License, Version 2.0 (the "License"); you may not
+use this file except in compliance with the License. You may obtain a copy of
+the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+License for the specific language governing permissions and limitations under
+the License.
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../iron-test-helpers/test-helpers.js"></script>
+    <script src="../../iron-test-helpers/mock-interactions.js"></script>
+    <script src="common.js"></script>
+    <link rel="import" href="../cookie-jar.html">
+  </head>
+  <body>
+
+    <test-fixture id="basic">
+      <template>
+        <cookie-jar></cookie-jar>
+      </template>
+    </test-fixture>
+
+    <script>
+    /* global CookieTestHelper, fixture, assert */
+    suite('Storing cookies', function() {
+      var element;
+      var request;
+      var response;
+
+      suite('extract() with empty database', function() {
+
+        setup(function() {
+          element = fixture('basic');
+          request = CookieTestHelper.createRequest();
+          response = CookieTestHelper.createResponse();
+        });
+
+        test('Should return cookie list with one element', function() {
+          var result = element.extract(response, request.url);
+          assert.lengthOf(result.cookies, 1);
+        });
+
+        test('Should return empty expired list', function() {
+          var result = element.extract(response, request.url);
+          assert.lengthOf(result.expired, 0);
+        });
+
+        test('Should append redirect cookies', function() {
+          var redirect = CookieTestHelper.createResponse('other-cookie=redirect');
+          redirect.requestUrl = 'http://sub.domain.com/path/';
+          var result = element.extract(response, request.url, [redirect]);
+          assert.lengthOf(result.cookies, 2);
+        });
+      });
+
+      suite('_makeCookieId()', function() {
+        var id;
+        setup(function() {
+          element = fixture('basic');
+          request = CookieTestHelper.createRequest();
+          response = CookieTestHelper.createResponse();
+          var result = element.extract(response, request.url);
+          id = element._makeCookieId(result.cookies[0]);
+        });
+
+        test('Should create an ID string', function() {
+          assert.typeOf(id, 'string');
+        });
+
+        test('ID contains domain name', function() {
+          assert.notEqual(id.indexOf('sub.domain.com'), -1);
+        });
+
+        test('ID does not contain undefined', function() {
+          assert.equal(id.indexOf('undefined'), -1);
+        });
+      });
+
+      suite('_store()', function() {
+        suiteTeardown(function() {
+          return CookieTestHelper.deleteDatabase();
+        });
+        var cookies;
+        setup(function() {
+          element = fixture('basic');
+          request = CookieTestHelper.createRequest();
+          response = CookieTestHelper.createResponse();
+          var result = element.extract(response, request.url);
+          cookies = result.cookies;
+        });
+
+        test('Stores cookies in empty database', function() {
+          return element._store(cookies)
+          .then(function(result) {
+            return result.filter(function(item) {
+              return !item.ok;
+            });
+          })
+          .then(function(result) {
+            assert.lengthOf(result, 0);
+          });
+        });
+
+        test('Updates cookies in the database', function() {
+          return element._store(cookies)
+          .then(function(result) {
+            return result.filter(function(item) {
+              return !item.ok;
+            });
+          })
+          .then(function(result) {
+            assert.lengthOf(result, 0);
+          });
+        });
+
+        test('Restores deleted cookie', function() {
+          var db = element._db;
+          var id = element._makeCookieId(cookies[0]);
+          return db.get(id)
+          .then(function(doc) {
+            return db.remove(doc);
+          })
+          .then(function() {
+            return element._store(cookies);
+          })
+          .then(function(result) {
+            return result.filter(function(item) {
+              return !item.ok;
+            });
+          })
+          .then(function(result) {
+            assert.lengthOf(result, 0);
+          })
+          .then(function() {
+            return db.get(id);
+          })
+          .then(function(doc) {
+            assert.notEqual(doc._deleted, true);
+          });
+        });
+      });
+
+    });
+    </script>
+
+  </body>
+</html>
