@@ -152,6 +152,55 @@ the License.
         });
       });
 
+      suite('Handles response-ready event', function() {
+        var request;
+        var response;
+
+        setup(function() {
+          element = fixture('basic');
+          request = CookieTestHelper.createRequest();
+          response = CookieTestHelper.createResponse('other-cookie=redirect');
+        });
+
+        suiteTeardown(function() {
+          return CookieTestHelper.deleteDatabase();
+        });
+
+        test('Handles response-ready event', function(done) {
+          CookieTestHelper.fire('response-ready', {
+            request: request,
+            response: response
+          });
+          // So there's nothing that can be tested here because there's no
+          // feedback (nor can be).
+          // Instead just wait some time. If any error message is printed
+          // to the console the the test fails.
+          setTimeout(function() {
+            done();
+          }, 500);
+        });
+      });
+
+      suite('_processResponse()', function() {
+        var request;
+        var response;
+
+        setup(function() {
+          element = fixture('basic');
+          request = CookieTestHelper.createRequest();
+          response = CookieTestHelper.createResponse('other-cookie=redirect');
+        });
+
+        suiteTeardown(function() {
+          return CookieTestHelper.deleteDatabase();
+        });
+
+        test('Processes the response for the response-ready event', function() {
+          this.timeout(5000);
+          return element._processResponse(request, response);
+        });
+      });
+
     });
     </script>
 

@@ -64,5 +64,8 @@ CookieTestHelper.deleteDatabase = function() {
     request.onsuccess = function() {
       resolve();
     };
+    request.onblocked = function() {
+      reject(new Error('Unable to delete _pouch_cookies database. Transaction is blocked'));
+    };
   });
 };
