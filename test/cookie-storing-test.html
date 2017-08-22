@@ -89,8 +89,13 @@ the License.
       });
 
       suite('_store()', function() {
-        suiteTeardown(function() {
-          return CookieTestHelper.deleteDatabase();
+        suiteTeardown(function(done) {
+          window.setTimeout(function() {
+            CookieTestHelper.deleteDatabase()
+            .then(function() {
+              done();
+            });
+          }, 1000); 
         });
         var cookies;
         setup(function() {
@@ -148,6 +153,9 @@ the License.
           })
           .then(function(doc) {
             assert.notEqual(doc._deleted, true);
+          })
+          .then(function() {
+            return db.close();
           });
         });
       });
