@@ -17,7 +17,7 @@ the License.
 <link rel="import" href="../headers-parser-behavior/headers-parser-behavior.html">
 <link rel="import" href="../app-pouchdb/pouchdb.html">
 <link rel="import" href="../url/url-polyfill.html">
-<link rel="import" href="../arc-headers/arc-headers.html">
+<link rel="import" href="../fetch-polyfill/fetch-polyfill.html">
 <!--
 A cookie storage and request / response manipulation for other that XHR
 transport methods.
@@ -632,7 +632,7 @@ Polymer({
         return true;
       });
     })
-    .then(function(db, cookies) {
+    .then(function(cookies) {
       var promises = cookies.map(function(i) {
         return db.remove(i.id, i.value.rev);
       });
@@ -643,7 +643,7 @@ Polymer({
         'message': ['Unable delete expired cookies.', e, keys],
         'level': 'warn'
       });
-    });
+    }.bind(this));
   }
 });
 </script>
