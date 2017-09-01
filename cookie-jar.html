@@ -632,7 +632,7 @@ Polymer({
         return true;
       });
     })
-    .then(function(db, cookies) {
+    .then(function(cookies) {
       var promises = cookies.map(function(i) {
         return db.remove(i.id, i.value.rev);
       });
