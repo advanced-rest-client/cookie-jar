@@ -1,3 +1,18 @@
+<a name="0.1.2"></a>
+## [0.1.2](https://github.com/advanced-rest-client/cookie-jar/compare/0.1.1...0.1.2) (2017-09-01)
+
+
+### Fix
+
+* Fixing ... I don't event know what that was ;) ([0b576635f362b5038a0bb6fe0f024409f1cef1f9](https://github.com/advanced-rest-client/cookie-jar/commit/0b576635f362b5038a0bb6fe0f024409f1cef1f9))
+* Fixing scope access ([dd0c8099d84c21d93ff2d54f30cfa3947327708c](https://github.com/advanced-rest-client/cookie-jar/commit/dd0c8099d84c21d93ff2d54f30cfa3947327708c))
+
+### Update
+
+* Replacing arc-headers with ARC's fetch fork. ([d13ca2830cc1126b8a5c187f91e688859524385f](https://github.com/advanced-rest-client/cookie-jar/commit/d13ca2830cc1126b8a5c187f91e688859524385f))
+
+
+
 <a name="0.1.1"></a>
 ## 0.1.1 (2017-08-21)
 
