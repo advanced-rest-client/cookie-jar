@@ -159,7 +159,7 @@ Polymer({
       if (headers[i].name.toLowerCase() === 'cookie') {
         found = true;
         // TODO: should it check for duplicates?
-        headers[i].value = header.value + '; ' + header;
+        headers[i].value = headers[i].value + '; ' + header;
         break;
       }
     }
