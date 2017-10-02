@@ -1,3 +1,17 @@
+<a name="0.1.4"></a>
+## [0.1.4](https://github.com/advanced-rest-client/cookie-jar/compare/0.1.2...0.1.4) (2017-10-02)
+
+
+### Fix
+
+* Fixed cookie value assignment. ([70aed493c62bb1dedf351c90a71387560f8bc0fe](https://github.com/advanced-rest-client/cookie-jar/commit/70aed493c62bb1dedf351c90a71387560f8bc0fe))
+
+### Update
+
+* Updated version of fetch ([936bb4755737c5b1dfe1695324bf710cf9da7395](https://github.com/advanced-rest-client/cookie-jar/commit/936bb4755737c5b1dfe1695324bf710cf9da7395))
+
+
+
 <a name="0.1.3"></a>
 ## [0.1.3](https://github.com/advanced-rest-client/cookie-jar/compare/0.1.2...0.1.3) (2017-09-01)
 
